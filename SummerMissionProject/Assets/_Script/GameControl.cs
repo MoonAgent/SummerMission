@@ -18,7 +18,7 @@ public class GameControl : MonoBehaviour
     private void ChangeHeight(float t_heigt = 1f)
     {
         m_heightVal = t_heigt;
-        m_cubeObj.transform.localScale = new Vector3(1f, m_heightVal, 1f);
+        m_cubeObj.transform.localScale = new Vector3(m_heightVal, m_heightVal, m_heightVal);
     }
 
     void Update()
