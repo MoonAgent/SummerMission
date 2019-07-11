@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class DragBehavior : MonoBehaviour,IDragHandler,IEndDragHandler
 {
+    public ObjType type;
     public GameObject triggerObj;
     public PlaceName belongPlace;
     public MainControl710 mainControl;
@@ -28,15 +29,8 @@ public class DragBehavior : MonoBehaviour,IDragHandler,IEndDragHandler
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "land")
+        if (collision.tag == "land" || collision.tag == "boat" || collision.tag == "land2")
         {
-            //print("land");
-            triggerObj = collision.gameObject;
-        }
-
-        if (collision.tag == "boat")
-        {
-            //print("boat");
             triggerObj = collision.gameObject;
         }
     }
@@ -48,19 +42,51 @@ public class DragBehavior : MonoBehaviour,IDragHandler,IEndDragHandler
 
         if (triggerObj.tag == "boat")
         {
-            SetSeat(PlaceName.Boat);
-            //belongPlace = PlaceName.Boat;
-            
+            if (mainControl.isLeft)
+            {
+                if (belongPlace == PlaceName.LLand || belongPlace == PlaceName.Boat)
+                    SetSeat(PlaceName.Boat);
+                else
+                    ReturnOrignPlace();
+            }
+            else if (!mainControl.isLeft)
+            {
+                if (belongPlace == PlaceName.RLand || belongPlace == PlaceName.Boat)
+                    SetSeat(PlaceName.Boat);
+                else
+                    ReturnOrignPlace();
+            }
+
         }
         else if (triggerObj.tag == "land")
         {
-            //belongPlace = PlaceName.LLand;
-            SetSeat(PlaceName.LLand);
+            if (mainControl.isLeft)
+            {
+                if (belongPlace == PlaceName.Boat)
+                    SetSeat(PlaceName.LLand);
+                else
+                    ReturnOrignPlace();
+            }
+            else
+                ReturnOrignPlace();
+
+            if (belongPlace == PlaceName.LLand)
+                SetSeat(PlaceName.LLand);
         }
         else if (triggerObj.tag == "land2")
         {
-            ///belongPlace = PlaceName.RLand;
-            SetSeat(PlaceName.RLand);
+            if (!mainControl.isLeft)
+            {
+                if (belongPlace == PlaceName.Boat)
+                    SetSeat(PlaceName.RLand);
+                else
+                    ReturnOrignPlace();
+            }
+            else
+                ReturnOrignPlace();
+
+            if (belongPlace == PlaceName.RLand)
+                SetSeat(PlaceName.RLand);
         }
     }
 
@@ -88,5 +114,10 @@ public class DragBehavior : MonoBehaviour,IDragHandler,IEndDragHandler
             mainControl.IntoSomePlace(_obj.GetComponent<DragBehavior>());
         }
         mainControl.IntoSomePlace(this);
+    }
+
+    private void ReturnOrignPlace()
+    {
+        this.transform.localPosition = Vector2.zero;
     }
 }

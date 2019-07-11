@@ -6,6 +6,7 @@ TagManager:
   tags:
   - land
   - boat
+  - land2
   layers:
   - Default
   - TransparentFX
